@@ -1,28 +1,18 @@
 package com.bekir.business.services.impl;
 
+import com.bekir.business.dto.CreditApplicationInfoDto;
 import com.bekir.business.dto.CreditDto;
-import com.bekir.business.dto.UserDto;
 import com.bekir.business.services.CreditServices;
 import com.bekir.business.services.GenerateCreditScoreServices;
-import com.bekir.business.services.UserServices;
 import com.bekir.data.entity.CreditEntity;
 import com.bekir.data.entity.UserEntity;
-import com.bekir.data.repository.CreditRepository;
-import com.bekir.data.repository.UserRepository;
+import com.bekir.exception.repository.CreditRepository;
+import com.bekir.exception.repository.UserRepository;
 import com.bekir.exception.ResourceNotFoundException;
-import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -45,13 +35,13 @@ public class CreditServiceImpl implements CreditServices {
     // http://localhost:8080/api/v1/credits
     @PostMapping("/credits")
     @Override
-    public CreditDto createCredit(@RequestBody UserDto userDto) {
-        UserEntity user = (UserEntity) userRepository.findUserByIdentityNumberAndBirthDate(userDto.getIdentityNumber(), userDto.getBirthDate());
+    public CreditDto createCredit(@RequestBody CreditApplicationInfoDto creditApplicationInfoDto) {
+        UserEntity user = (UserEntity) userRepository.findUserByIdentityNumberAndBirthDate(creditApplicationInfoDto.getIdentityNumber(), creditApplicationInfoDto.getBirthDate());
         double creditLimit = 0;
         char acceptedyn = 'N';
 
         if(user == null)
-            throw new ResourceNotFoundException("User not exist with identity number: " + userDto.getIdentityNumber() + " and birthdate: " + userDto.getBirthDate());
+            throw new ResourceNotFoundException("User not exist with identity number: " + creditApplicationInfoDto.getIdentityNumber() + " and birthdate: " + creditApplicationInfoDto.getBirthDate());
 
         int creditScore = generateCreditScoreServices.getCreditScore();
 

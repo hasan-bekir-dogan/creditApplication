@@ -1,4 +1,4 @@
-package com.bekir.data.repository;
+package com.bekir.exception.repository;
 
 import com.bekir.data.entity.CreditEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
